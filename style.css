@@ -155,6 +155,7 @@ body {
 #gameScreen {
   background: #1a1a1a;
   flex-direction: column;
+  position: relative;
 }
 
 .game-container {
@@ -289,13 +290,27 @@ body {
   }
 
   .game-info {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 150px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 15px;
+    padding: 12px;
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+  }
+
+  .game-container {
+    margin: 10px 0;
   }
 
   .info-box {
     min-width: auto;
     width: 100%;
+    padding: 10px;
   }
 }

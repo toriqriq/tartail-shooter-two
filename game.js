@@ -343,11 +343,6 @@ class Game {
       gameState.mouseX = (e.clientX - rect.left) * scaleX;
       gameState.mouseY = (e.clientY - rect.top) * scaleY;
     });
-
-    canvas.addEventListener("pointerleave", () => {
-      gameState.mouseX = CONFIG.CANVAS_WIDTH / 2;
-      gameState.mouseY = CONFIG.CANVAS_HEIGHT - 100;
-    });
   }
 
   init(weapon, armor, energy) {
