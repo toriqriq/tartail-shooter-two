@@ -20,6 +20,7 @@ body {
   height: 100%;
   top: 0;
   left: 0;
+  overflow-y: auto;
 }
 
 .screen.active {
@@ -253,8 +254,23 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-  .menu-container {
+@media (max-width: 768px) {
+  body {
+    align-items: flex-start;
+    padding: 20px 10px;
+  }
+
+  .screen.active {
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+  }
+
+  .menu-container,
+  .game-over-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
     padding: 20px;
   }
 
@@ -269,9 +285,12 @@ body {
 
   .game-info {
     flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .info-box {
+    min-width: auto;
     width: 100%;
   }
 }
