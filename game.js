@@ -26,6 +26,12 @@ const gameState = {
   isRunning: false,
   mouseX: CONFIG.CANVAS_WIDTH / 2,
   mouseY: CONFIG.CANVAS_HEIGHT - 100,
+  isTouch: false,
+  pointerActive: false,
+  lastPointerX: null,
+  lastPointerY: null,
+  touchDeltaX: 0,
+  touchDeltaY: 0,
 };
 
 // Classes
@@ -40,21 +46,28 @@ class Player {
   }
 
   update(mouseX, mouseY) {
-    // Get target position from mouse or touch
-    const targetX = mouseX;
-    const targetY = mouseY;
+    if (gameState.isTouch && gameState.pointerActive) {
+      this.x += gameState.touchDeltaX;
+      this.y += gameState.touchDeltaY;
+      gameState.touchDeltaX = 0;
+      gameState.touchDeltaY = 0;
+    } else {
+      // Get target position from mouse
+      const targetX = mouseX;
+      const targetY = mouseY;
 
-    // Smooth movement towards target
-    const dx = targetX - (this.x + this.width / 2);
-    const dy = targetY - (this.y + this.height / 2);
-    const distance = Math.sqrt(dx * dx + dy * dy);
+      // Smooth movement towards target
+      const dx = targetX - (this.x + this.width / 2);
+      const dy = targetY - (this.y + this.height / 2);
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance > 5) {
-      const moveX = (dx / distance) * CONFIG.PLAYER_SPEED;
-      const moveY = (dy / distance) * CONFIG.PLAYER_SPEED;
+      if (distance > 5) {
+        const moveX = (dx / distance) * CONFIG.PLAYER_SPEED;
+        const moveY = (dy / distance) * CONFIG.PLAYER_SPEED;
 
-      this.x += moveX;
-      this.y += moveY;
+        this.x += moveX;
+        this.y += moveY;
+      }
     }
 
     // Boundary check
@@ -331,17 +344,59 @@ class Game {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      gameState.mouseX = (e.clientX - rect.left) * scaleX;
-      gameState.mouseY = (e.clientY - rect.top) * scaleY;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+
+      if (e.pointerType === "touch" || e.pointerType === "pen") {
+        if (gameState.pointerActive && gameState.lastPointerX !== null) {
+          gameState.touchDeltaX = x - gameState.lastPointerX;
+          gameState.touchDeltaY = y - gameState.lastPointerY;
+        }
+        gameState.lastPointerX = x;
+        gameState.lastPointerY = y;
+        gameState.isTouch = true;
+      } else {
+        gameState.mouseX = x;
+        gameState.mouseY = y;
+      }
     });
 
-    // Pointer down to capture touch start and initial position
+    // Pointer down to start drag or touch swipe
     canvas.addEventListener("pointerdown", (e) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      gameState.mouseX = (e.clientX - rect.left) * scaleX;
-      gameState.mouseY = (e.clientY - rect.top) * scaleY;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+
+      if (e.pointerType === "touch" || e.pointerType === "pen") {
+        gameState.pointerActive = true;
+        gameState.lastPointerX = x;
+        gameState.lastPointerY = y;
+        gameState.touchDeltaX = 0;
+        gameState.touchDeltaY = 0;
+        gameState.isTouch = true;
+      } else {
+        gameState.mouseX = x;
+        gameState.mouseY = y;
+        gameState.isTouch = false;
+      }
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      gameState.pointerActive = false;
+      gameState.touchDeltaX = 0;
+      gameState.touchDeltaY = 0;
+      gameState.lastPointerX = null;
+      gameState.lastPointerY = null;
+    });
+
+    canvas.addEventListener("pointercancel", () => {
+      gameState.pointerActive = false;
+      gameState.touchDeltaX = 0;
+      gameState.touchDeltaY = 0;
+      gameState.lastPointerX = null;
+      gameState.lastPointerY = null;
     });
   }
 
