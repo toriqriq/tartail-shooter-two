@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pesawat Tembak</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Menu Screen -->
+    <div id="menuScreen" class="screen active">
+      <div class="menu-container">
+        <h1>PESAWAT TEMBAK</h1>
+
+        <div class="menu-section">
+          <h2>Pilih Senjata</h2>
+          <div class="option-group">
+            <label class="option">
+              <input type="radio" name="weapon" value="dual" checked />
+              <span class="option-title">Dual Shot</span>
+              <span class="option-desc"
+                >2 tembakan sekaligus, damage normal</span
+              >
+            </label>
+            <label class="option">
+              <input type="radio" name="weapon" value="heavy" />
+              <span class="option-title">Heavy Shot</span>
+              <span class="option-desc">1 tembakan, damage 2x lipat</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <h2>Pilih Armor</h2>
+          <div class="option-group">
+            <label class="option">
+              <input type="radio" name="armor" value="tank" checked />
+              <span class="option-title">Tank Armor</span>
+              <span class="option-desc">HP: 100 (Stabil)</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="armor" value="regen" />
+              <span class="option-title">Regen Armor</span>
+              <span class="option-desc">HP Regen +1 setiap tembak</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <h2>Pilih Energy</h2>
+          <div class="option-group">
+            <label class="option">
+              <input type="radio" name="energy" value="damage" checked />
+              <span class="option-title">Damage Boost</span>
+              <span class="option-desc">Damage Pesawat +1</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="energy" value="defense" />
+              <span class="option-title">Defense Boost</span>
+              <span class="option-desc"
+                >Pertahanan +1 (Kurangi damage musuh)</span
+              >
+            </label>
+          </div>
+        </div>
+
+        <button id="startBtn" class="btn-start">Mulai Game</button>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+      <div id="gameContainer" class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+      </div>
+      <div class="game-info">
+        <div class="info-box">
+          <span>HP: <span id="playerHP">100</span>/100</span>
+        </div>
+        <div class="info-box">
+          <span>Damage: <span id="damageDisplay">1</span></span>
+        </div>
+        <div class="info-box">
+          <span>Defense: <span id="defenseDisplay">0</span></span>
+        </div>
+        <div class="info-box">
+          <span>Senjata: <span id="weaponDisplay">Dual</span></span>
+        </div>
+        <div class="info-box">
+          <span>Score: <span id="score">0</span></span>
+        </div>
+        <div class="info-box" style="color: #ffcc00">
+          <span>💡 Gerakkan Mouse/Layar - Tembakan Otomatis</span>
+        </div>
+      </div>
+      <button id="menuBtn" class="btn-menu">Kembali ke Menu</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="screen">
+      <div class="game-over-container">
+        <h1>GAME OVER</h1>
+        <div class="final-score">
+          <p>Score Akhir: <span id="finalScore">0</span></p>
+        </div>
+        <button id="restartBtn" class="btn-start">Mainkan Lagi</button>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
