@@ -24,11 +24,8 @@ const gameState = {
   playerDefense: 0,
   score: 0,
   isRunning: false,
-  mouseX: 0,
-  mouseY: 0,
-  touchX: 0,
-  touchY: 0,
-  isTouch: false,
+  mouseX: CONFIG.CANVAS_WIDTH / 2,
+  mouseY: CONFIG.CANVAS_HEIGHT - 100,
 };
 
 // Classes
@@ -44,8 +41,8 @@ class Player {
 
   update(mouseX, mouseY) {
     // Get target position from mouse or touch
-    const targetX = gameState.isTouch ? gameState.touchX : mouseX;
-    const targetY = gameState.isTouch ? gameState.touchY : mouseY;
+    const targetX = mouseX;
+    const targetY = mouseY;
 
     // Smooth movement towards target
     const dx = targetX - (this.x + this.width / 2);
@@ -332,17 +329,19 @@ class Game {
     // Pointer move works for mouse and touch on the game canvas
     canvas.addEventListener("pointermove", (e) => {
       const rect = canvas.getBoundingClientRect();
-      gameState.mouseX = e.clientX - rect.left;
-      gameState.mouseY = e.clientY - rect.top;
-      gameState.isTouch = e.pointerType === "touch" || e.pointerType === "pen";
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      gameState.mouseX = (e.clientX - rect.left) * scaleX;
+      gameState.mouseY = (e.clientY - rect.top) * scaleY;
     });
 
     // Pointer down to capture touch start and initial position
     canvas.addEventListener("pointerdown", (e) => {
       const rect = canvas.getBoundingClientRect();
-      gameState.mouseX = e.clientX - rect.left;
-      gameState.mouseY = e.clientY - rect.top;
-      gameState.isTouch = e.pointerType === "touch" || e.pointerType === "pen";
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      gameState.mouseX = (e.clientX - rect.left) * scaleX;
+      gameState.mouseY = (e.clientY - rect.top) * scaleY;
     });
 
     canvas.addEventListener("pointerleave", () => {
