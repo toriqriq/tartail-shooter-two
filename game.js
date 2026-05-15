@@ -327,47 +327,25 @@ class Game {
   }
 
   setupEventListeners() {
-    // Mouse movement tracking
-    document.addEventListener("mousemove", (e) => {
-      const canvas = document.getElementById("gameCanvas");
+    const canvas = this.canvas;
+
+    // Pointer move works for mouse and touch on the game canvas
+    canvas.addEventListener("pointermove", (e) => {
       const rect = canvas.getBoundingClientRect();
       gameState.mouseX = e.clientX - rect.left;
       gameState.mouseY = e.clientY - rect.top;
-      gameState.isTouch = false;
+      gameState.isTouch = e.pointerType === "touch" || e.pointerType === "pen";
     });
 
-    // Touch movement tracking
-    document.addEventListener(
-      "touchmove",
-      (e) => {
-        e.preventDefault();
-        const canvas = document.getElementById("gameCanvas");
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        gameState.touchX = touch.clientX - rect.left;
-        gameState.touchY = touch.clientY - rect.top;
-        gameState.isTouch = true;
-      },
-      { passive: false },
-    );
+    // Pointer down to capture touch start and initial position
+    canvas.addEventListener("pointerdown", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      gameState.mouseX = e.clientX - rect.left;
+      gameState.mouseY = e.clientY - rect.top;
+      gameState.isTouch = e.pointerType === "touch" || e.pointerType === "pen";
+    });
 
-    // Touch start
-    document.addEventListener(
-      "touchstart",
-      (e) => {
-        e.preventDefault();
-        const canvas = document.getElementById("gameCanvas");
-        const rect = canvas.getBoundingClientRect();
-        const touch = e.touches[0];
-        gameState.touchX = touch.clientX - rect.left;
-        gameState.touchY = touch.clientY - rect.top;
-        gameState.isTouch = true;
-      },
-      { passive: false },
-    );
-
-    // Mouse leave - reset position
-    document.addEventListener("mouseleave", () => {
+    canvas.addEventListener("pointerleave", () => {
       gameState.mouseX = CONFIG.CANVAS_WIDTH / 2;
       gameState.mouseY = CONFIG.CANVAS_HEIGHT - 100;
     });
